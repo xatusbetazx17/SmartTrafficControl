@@ -55,10 +55,44 @@ Weather-Based Traffic Adjustments: Extends green light durations in adverse weat
 
 To run the Smart Traffic Light System, clone the repository and ensure the required dependencies are installed.
 
-```bash
-git clone https://github.com/xatusbetazx17/your-repo.git
-cd your-repo
-```
+## Step 1: Clone the Repository
+To run the Smart Traffic Light System, start by cloning the repository from GitHub:
+
+bash
+Copy code
+```git clone https://github.com/xatusbetazx17/traficcontrol.git```
+```cd traficcontrol```
+
+## Step 2: Create the Script File
+Once inside the cloned repository directory, create the main script file that will run the Smart Traffic Light System.
+
+## Create the Bash script:
+
+bash
+Copy code
+```nano traffic_control.sh``` 
+
+Copy and paste the script code into the traffic_control.sh file. Make sure to include all necessary functions and logic.
+
+## Save and exit the file:
+
+Press Ctrl + O to save the file.
+Press Ctrl + X to exit the nano editor.
+
+## Step 3: Make the Script Executable
+Once the script is created, you need to make it executable:
+
+bash
+Copy code
+```chmod +x traffic_control.sh```
+
+## Step 4: Run the Script
+Run the script to set up the Smart Traffic Light System:
+
+bash
+Copy code
+```sudo ./traffic_control.sh```
+
 
 ```bash
 
@@ -226,49 +260,7 @@ run_system
 
 
 ```
-## Requirements
-Python 3.x
-pip (for Python package management)
-Install the required dependencies manually if needed:
 
-```bash
-Copy code
-pip install requests opencv-python paho-mqtt
-````
-### For tkinter installation:
-On Ubuntu/Debian:
-bash
-Copy code
-```sudo apt-get install python3-tk```
-On Arch Linux:
-bash
-Copy code
-```sudo pacman -S tk```
-## Usage
-To run the script, execute:
-
-bash
-Copy code
-```python traffic_light_system.py```
-## The script will:
-
-Fetch real-time weather data from OpenWeather.
-Simulate vehicle detection.
-Automatically adjust traffic light behavior based on the conditions.
-Launch a graphical interface (if graphical capabilities are detected).
-Example:
-python
-Copy code
-```bash
-city = 'New York'
-vehicle_image = 'emergency_vehicle.jpg'
-traffic_decision = control_traffic_system(city, vehicle_image)
-Libraries Used
-requests: For fetching real-time weather data from OpenWeather API.
-opencv-python: For vehicle detection (future implementation for image processing).
-paho-mqtt: For sending MQTT messages to vehicles.
-tkinter: For graphical user interface (if available).
-```
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
 
