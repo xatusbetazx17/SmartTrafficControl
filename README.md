@@ -98,15 +98,34 @@ Copy code
 
 #!/bin/bash
 
-# Ensure necessary packages are installed
+# Function to detect the Linux distribution and install packages accordingly
 install_dependencies() {
     echo "Installing necessary packages..."
-    
-    # Update the package list and install dependencies
-    sudo apt update
 
-    # Install curl for API requests, jq for parsing JSON, mosquitto-clients for MQTT, and fswebcam for camera input
-    sudo apt install -y curl jq mosquitto-clients fswebcam
+    # Detect the Linux distribution
+    if [ -f /etc/os-release ]; then
+        . /etc/os-release
+        distro=$ID
+    fi
+
+    # Install necessary packages based on the Linux distribution
+    case "$distro" in
+        ubuntu|debian)
+            sudo apt update
+            sudo apt install -y curl jq mosquitto-clients fswebcam
+            ;;
+        fedora)
+            sudo dnf install -y curl jq mosquitto-clients fswebcam
+            ;;
+        arch|manjaro|steamos)
+            # For Arch, Manjaro, and SteamOS (since it's Arch-based)
+            sudo pacman -Sy --noconfirm curl jq mosquitto fswebcam
+            ;;
+        *)
+            echo "Unsupported Linux distribution: $distro"
+            exit 1
+            ;;
+    esac
 
     echo "Dependencies installed!"
 }
@@ -131,10 +150,10 @@ get_weather_data() {
     local city=$1
     local api_key="your_openweather_api_key"  # Replace with your OpenWeather API key
     local weather_url="http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${api_key}"
-    
+
     # Fetch the weather data using curl
     weather=$(curl -s "$weather_url" | jq -r '.weather[0].main')
-    
+
     if [ -z "$weather" ]; then
         echo "Unknown"
     else
@@ -159,7 +178,7 @@ detect_pedestrians() {
 # Function to simulate camera capture and criminal identification (e.g., facial recognition)
 capture_image_and_check_criminal_record() {
     echo "Capturing image using the camera..."
-    
+
     # Capture an image using the fswebcam tool
     fswebcam --resolution 640x480 --save /tmp/captured_image.jpg
 
@@ -234,7 +253,7 @@ control_traffic_system() {
 
     # Send decision signals to vehicles (using MQTT)
     send_signal_to_vehicles "$decision"
-    
+
     # Output the traffic decision
     echo "Traffic Decision: $decision"
 }
@@ -257,6 +276,7 @@ run_system() {
 
 # Run the traffic system setup
 run_system
+
 
 
 ```
