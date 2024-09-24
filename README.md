@@ -1,23 +1,55 @@
 # SmartTrafficControl
 
+### Smart Traffic Light System - Advanced Edition
 ## Description
+The Smart Traffic Light System is an intelligent, real-time traffic management solution designed to dynamically adjust traffic light behavior based on various inputs, such as weather conditions, vehicle types (e.g., normal, bus, emergency vehicles), and pedestrian detection. This system prioritizes emergency vehicles and pedestrians when necessary, while also monitoring weather conditions to optimize traffic flow for safety and efficiency.
 
-This project is a **Smart Traffic Light System** that dynamically manages traffic based on real-time conditions such as **weather** and **vehicle types** (including emergency vehicles). The system prioritizes certain vehicles (e.g., emergency vehicles) and adjusts traffic light timings according to weather conditions, providing a modern, intelligent solution for traffic management.
-
-The system can:
-- **Detect weather conditions** using the OpenWeather API.
-- **Detect vehicle types**, including normal, bus, and emergency vehicles (using OpenCV).
-- **Prioritize emergency vehicles**, extending green light time for them.
-- **Send real-time MQTT messages** to vehicles, explaining the current traffic situation.
-- **Launch a graphical user interface (GUI)** (if available) for monitoring the system.
-- **Install required libraries automatically** if they are missing.
+Additionally, the system integrates real-time messaging with vehicles via MQTT, provides automated camera-based criminal detection, and can be remotely connected to police servers for reporting suspicious activity or identifying wanted individuals. The system is designed to be modular, with automatic installation of required dependencies and seamless integration with WiFi networks.
 
 ## Features
-- **Weather-based Traffic Control**: Adjust traffic light timing based on real-time weather (e.g., extending green light during fog or rain).
-- **Vehicle Detection**: Simulates detection of different vehicle types with the option to prioritize emergency vehicles.
-- **Real-Time Messaging**: Uses MQTT to send priority messages to connected vehicles.
-- **GUI Integration**: Provides a graphical user interface when the system detects available graphical capabilities (using `Tkinter`).
-- **Auto-Installation of Libraries**: Automatically installs missing Python libraries (`requests`, `opencv-python`, `paho-mqtt`) if they are not installed.
+Weather-based Traffic Control:
+
+The system adjusts traffic light timings based on real-time weather conditions (e.g., extending green light during fog or rain) using the OpenWeather API.
+Vehicle Detection:
+
+Detects and prioritizes different vehicle types, including normal vehicles, buses, and emergency vehicles.
+Emergency vehicles are automatically prioritized by extending the green light for them.
+Pedestrian Detection:
+
+The system detects nearby pedestrians and gives them priority, changing the traffic lights to allow safe crossing when necessary.
+Real-Time Messaging to Vehicles:
+
+Uses MQTT to send real-time messages to vehicles, explaining current traffic conditions and priority decisions.
+Vehicles receive information about traffic light changes and any prioritization (e.g., for emergency vehicles).
+Criminal Detection and Police Notification:
+
+The system captures images from a connected camera and checks for known criminals using a remote server.
+If a match is found, the system automatically sends a notification to law enforcement (e.g., local police) via MQTT, including details about the incident.
+Automatic WiFi Connection:
+
+The system can automatically connect to a WiFi network, enabling real-time data collection, reporting, and remote access to police servers or other authorities.
+Graphical User Interface (GUI) Integration:
+
+When graphical capabilities are available, the system launches a Tkinter-based GUI for monitoring and managing the traffic system, allowing operators to visually see traffic flow and prioritize vehicles.
+Auto-Installation of Dependencies:
+
+Automatically installs missing libraries or dependencies if they are not installed, including requests, opencv-python, paho-mqtt, and any other required packages. This ensures the system can be deployed on various environments without manual intervention.
+## Key Capabilities
+Real-Time Traffic Adjustments: Based on weather, vehicle, and pedestrian data, the system makes instant decisions to change traffic light behavior.
+
+Criminal Detection and Reporting: With camera integration, the system can detect wanted individuals and automatically notify the police through a secure connection.
+
+Emergency Vehicle Priority: Ensures that emergency vehicles always get the right of way by adjusting traffic lights to their favor.
+
+Pedestrian Safety: Detects pedestrians and dynamically prioritizes their need to cross safely.
+
+WiFi and Remote Connectivity: Automatically connects to WiFi to fetch weather data, update traffic decisions, and send reports to remote servers or law enforcement.
+
+## Use Cases
+Urban Traffic Management: Ensures efficient flow of traffic while giving priority to emergency services and vulnerable pedestrians.
+Law Enforcement Integration: Automatically notifies authorities if any wanted or suspicious individuals are detected through real-time camera integration.
+Weather-Based Traffic Adjustments: Extends green light durations in adverse weather conditions (rain, fog, etc.) to ensure safe driving conditions for all vehicles.
+
 
 ## Installation
 
