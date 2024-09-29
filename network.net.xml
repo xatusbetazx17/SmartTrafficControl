@@ -1,0 +1,9 @@
+ <net version="1.1">
+    <junctions>
+        <junction id="1" type="traffic_light" x="0" y="0"/>
+    </junctions>
+    <edges>
+        <edge id="e1" from="1" to="2" priority="1" />
+        <edge id="e2" from="2" to="1" priority="1" />
+    </edges>
+</net>
