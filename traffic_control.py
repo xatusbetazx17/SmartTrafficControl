@@ -2,7 +2,7 @@ import os
 import subprocess
 import sys
 import requests
-import traci
+import traci  # SUMO TraCI module for Python
 import cv2
 import time
 from playsound import playsound
@@ -117,7 +117,6 @@ def generate_network():
     else:
         print("Network generated!")
 
-
 # 2. Generate the vehicle routes based on selected scenario
 def generate_routes(scenario):
     print(f"Generating vehicle routes for scenario: {scenario}")
@@ -147,66 +146,54 @@ def generate_routes(scenario):
     else:
         print(f"Routes generated for {scenario} scenario!")
 
-
-# 3. Get real-time weather data and catastrophic weather prediction using OpenWeather One Call API
-def get_weather_and_forecast(lat, lon):
-    print(f"Fetching weather data and forecast for coordinates: ({lat}, {lon})...")
-    api_key = "your_openweather_api_key"  # Replace with your OpenWeather API key
+# 3. Run SUMO and control traffic lights based on weather, scenario, and camera detection
+def run_sumo(scenario):
+    print("Starting SUMO simulation...")
+    sumo_binary = "sumo-gui"  # or use "sumo" if you don’t need GUI
+    sumo_cmd = [sumo_binary, "-c", "sumo_config.sumocfg", "--log", "sumo.log"]
 
     try:
-        response = requests.get(f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&exclude=minutely&appid={api_key}")
-        data = response.json()
-
-        current_weather = data["current"]["weather"][0]["main"]
-        hourly_forecast = data["hourly"][:12]  # Next 12 hours forecast
-        alerts = data.get("alerts", [])
-
-        print(f"Current weather: {current_weather}")
-        print("Checking for catastrophic weather conditions...")
-
-        if alerts:
-            for alert in alerts:
-                print(f"Catastrophic Alert: {alert['event']} - {alert['description']}")
-                return "Catastrophic"
-        else:
-            # Check forecast for severe weather conditions (storms, tornadoes, etc.)
-            for hour in hourly_forecast:
-                weather_condition = hour["weather"][0]["main"]
-                if weather_condition in ["Thunderstorm", "Tornado", "Extreme"]:
-                    print(f"Upcoming severe weather detected: {weather_condition}")
-                    return "Severe"
-
-        return current_weather
-
+        traci.start(sumo_cmd)
+        print("SUMO started successfully.")
     except Exception as e:
-        print(f"Error fetching weather data: {e}")
-        return "Unknown"
+        print(f"Error starting SUMO: {e}")
+        sys.exit(1)
 
+    try:
+        # Simulate indefinitely until user stops
+        step = 0
+        while True:
+            traci.simulationStep()
+            step += 1
+            time.sleep(0.1)  # Add a small sleep for better performance monitoring
+            if step % 100 == 0:
+                print(f"Simulation running... step: {step}")
+    
+    except KeyboardInterrupt:
+        print("Simulation interrupted by user.")
 
-# 4. Check if a camera is connected
-def check_camera():
-    print("Checking if a camera is connected...")
-    camera = cv2.VideoCapture(0)  # Use default camera (index 0)
-    if camera.isOpened():
-        print("Camera is connected.")
-        return True
-    else:
-        print("No camera detected.")
-        return False
+    finally:
+        # Ensure the simulation is closed correctly after user interrupts or an error occurs
+        traci.close()
+        print(f"Simulation completed at step: {step}")
 
-
-# 5. Play sound based on traffic light color for the blind
-def play_sound_for_blind(color):
-    if color == "green":
-        print("Playing green light sound...")
-        playsound(green_light_sound)
-    elif color == "red":
-        print("Playing red light sound...")
-        playsound(red_light_sound)
-    elif color == "yellow":
-        print("Playing yellow light sound...")
-        playsound(yellow_light_sound)
-
+# 4. Create the SUMO configuration file
+def create_sumo_config():
+    print("Creating SUMO configuration file...")
+    sumo_config = '''<configuration>
+    <input>
+        <net-file value="my_network.net.xml"/>
+        <route-files value="routes.rou.xml"/>
+    </input>
+    <time>
+        <begin value="0"/>
+        <end value="3600"/>
+    </time>
+</configuration>'''
+    
+    with open("sumo_config.sumocfg", "w") as f:
+        f.write(sumo_config)
+    print("SUMO configuration file created!")
 
 # Main function to run the whole process
 def main():
@@ -223,9 +210,9 @@ def main():
         generate_network()  # Generate the network
         generate_routes(scenario)  # Generate the vehicle routes
 
-        # Step 3: Check weather and run SUMO simulation
-        lat, lon = 40.7128, -74.0060  # Example: New York City
-        get_weather_and_forecast(lat, lon)
+        # Step 3: Create the SUMO configuration and run the simulation
+        create_sumo_config()
+        run_sumo(scenario)  # Run the SUMO simulation
 
     except Exception as e:
         print(f"Error: {e}")
