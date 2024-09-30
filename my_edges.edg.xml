@@ -1,0 +1,4 @@
+<edges>
+    <edge id="e1" from="1" to="2" priority="1"/>
+    <edge id="e2" from="2" to="1" priority="1"/>
+</edges>

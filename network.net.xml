@@ -1,9 +1,18 @@
- <net version="1.1">
+<net version="1.1">
+    <!-- Define the nodes (points where edges start and end) -->
+    <nodes>
+        <node id="1" x="0" y="0"/>    <!-- Node 1 -->
+        <node id="2" x="100" y="0"/>  <!-- Node 2 -->
+    </nodes>
+
+    <!-- Define the junctions -->
     <junctions>
-        <junction id="1" type="traffic_light" x="0" y="0"/>
+        <junction id="1" type="traffic_light" x="0" y="0"/>  <!-- Traffic light at Node 1 -->
     </junctions>
+
+    <!-- Define the edges (roads) -->
     <edges>
-        <edge id="e1" from="1" to="2" priority="1" />
-        <edge id="e2" from="2" to="1" priority="1" />
+        <edge id="e1" from="1" to="2" priority="1"/>  <!-- Edge from Node 1 to Node 2 -->
+        <edge id="e2" from="2" to="1" priority="1"/>  <!-- Edge from Node 2 to Node 1 -->
     </edges>
 </net>
